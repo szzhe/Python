@@ -56,10 +56,10 @@
         * 
 '''
 
-num = 5
-for x in range(num):
-    for y in range(x):
-        print(" ", end=" ")
-    for z in range(num-x):
-        print("*", end=" ")
-    print()
+# num = 5
+# for x in range(num):
+#     for y in range(x):
+#         print(" ", end=" ")
+#     for z in range(num-x):
+#         print("*", end=" ")
+#     print()
