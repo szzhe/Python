@@ -49,17 +49,17 @@
 #     print()
 
 '''
-        * 
-      * * 
-    * * * 
-  * * * * 
 * * * * * 
+  * * * * 
+    * * * 
+      * * 
+        * 
 '''
 
-num = 6
-for x in range(1, num):
-    for y in range(num - x - 1):
+num = 5
+for x in range(num):
+    for y in range(x):
         print(" ", end=" ")
-    for z in range(x):
+    for z in range(num-x):
         print("*", end=" ")
     print()
