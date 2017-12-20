@@ -167,4 +167,58 @@ consonantRegex = re.compile(r'[^aeiouAEIOU]')
 mo1 = consonantRegex.findall('RoboCop eats baby food. BABY FOOD.')
 print(mo1)  # ['R', 'b', 'C', 'p', ' ', 't', 's', ' ', 'b', 'b', 'y', ' ', 'f', 'd', '.', ' ', 'B', 'B', 'Y', ' ', 'F', 'D', '.']
 
+'''---------------------------------插入字符和美元字符---------------------------------------------------------'''
+
+# 在正则表达式的开始处使用插入符号（^），表明匹配必须发生在被查找文本开始处
+# 再正则表达式的末尾加上美元符号（$），表示该字符串必须以这个正则表达式的模式结束
+# 可以同时使用^和$，表明整个字符串必须匹配该模式
+
+beginsWithHello = re.compile(r'^Hello')
+mo1 = beginsWithHello.search('Hello world!')
+print(mo1.group())  # Hello
+mo2 = beginsWithHello.search('He said hello.')
+print(mo2 == None)  # True
+
+endsWithNumber = re.compile(r'\d$')
+mo1 = endsWithNumber.search('Your number is 42')
+print(mo1.group())  # 2
+endsWithNumber = re.compile(r'\d+$')
+mo2 = endsWithNumber.search('Your number is 42')
+print(mo2.group())  # 42
+mo3 = endsWithNumber.search('Your number is forty two.')
+print(mo3 == None)  # True
+
+wholeStringIsNum = re.compile(r'^\d+$')
+mo1 = wholeStringIsNum.search('1234567890')
+print(mo1.group())  # 1234567890
+mo2 = wholeStringIsNum.search('12345xyz67890')
+print(mo2 == None)  # True
+mo3 = wholeStringIsNum.search('12 34567890')
+print(mo3 == None)  # True 必须匹配
+
+'''---------------------------------通配字符---------------------------------------------------------'''
+
+# .（句点）字符称为“通配符”.匹配除了换行之外的所有字符（只匹配一个字符）
+
+atRegex = re.compile(r'.at')
+mo1 = atRegex.findall('The cat in the hat sat on the flat mat.')
+print(mo1)  # ['cat', 'hat', 'sat', 'lat', 'mat']
+
+nameRegex = re.compile(r'First Name: (.*) Last Name: (.*)')
+mo = nameRegex.search('First Name: A l Last Name: Sweigart')
+print(mo.group())  # First Name: A l Last Name: Sweigart
+print(mo.group(1))  # A l
+print(mo.group(2))  # Sweigart
+
+nongreedyRegex = re.compile(r'<.*?>')
+mo1 = nongreedyRegex.search('<To serve man> for dinner.>')
+print(mo1.group())  # <To serve man>
+
+nongreedyRegex = re.compile(r'<.*>')
+mo2 = nongreedyRegex.search('<To serve man> for dinner.>')
+print(mo2.group())  # <To serve man> for dinner.>
+
+'''字符串'<To serve man> for dinner.>'对右肩括号有两种可能的匹配。
+在非贪心的正则表达式中，Python 匹配最短可能的字符串：'<To serve man>'。
+在贪心版本中，Python 匹配最长可能的字符串：'<To serve man> for dinner.>'''
 
