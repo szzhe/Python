@@ -14,4 +14,5 @@
 
 import re,pyperclip
 
+# 周末搞定
 phoneRegex = re.compile(r'\d{3,4}|\(\d{3,4}\)')
