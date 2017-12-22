@@ -222,3 +222,76 @@ print(mo2.group())  # <To serve man> for dinner.>
 在非贪心的正则表达式中，Python 匹配最短可能的字符串：'<To serve man>'。
 在贪心版本中，Python 匹配最长可能的字符串：'<To serve man> for dinner.>'''
 
+'''点-星将匹配除换行外的所有字符。通过传入re.DOTALL 作为re.compile()的第二个参数，可以让句点字符匹配所有字符，包括换行字符'''
+
+noNewlineRegex = re.compile('.*')
+mo = noNewlineRegex.search('Serve the public trust.\nProtect the innocent.\n Uphold the law.')
+print(mo.group())  # 'Serve the public trust.'
+newlineRegex = re.compile('.*', re.DOTALL)
+mo1 = newlineRegex.search('Serve the public trust.\n Protect the innocent.\n Uphold the law.')
+print(mo1.group())
+# Serve the public trust.
+# Protect the innocent.
+# Uphold the law.
+
+'''---------------------------------正则表达式符号复习---------------------------------------------------------'''
+
+'''
+?匹配零次或一次前面的分组。
+*匹配零次或多次前面的分组。
++匹配一次或多次前面的分组。
+{n}匹配n 次前面的分组。
+{n,}匹配n 次或更多前面的分组。
+{,m}匹配零次到m 次前面的分组。
+{n,m}匹配至少n 次、至多m 次前面的分组。
+{n,m}?或*?或+?对前面的分组进行非贪心匹配。
+^spam 意味着字符串必须以spam 开始。
+spam$意味着字符串必须以spam 结束。
+.匹配所有字符，换行符除外。
+\d、\w 和\s 分别匹配数字、单词和空格。
+\D、\W 和\S 分别匹配出数字、单词和空格外的所有字符。
+[abc]匹配方括号内的任意字符（诸如a、b 或c）。
+[^abc]匹配不在方括号内的任意字符。
+'''
+
+'''---------------------------------不区分大小写的匹配---------------------------------------------------------'''
+
+robocop = re.compile(r'robocop', re.I)  # re.IGNORECASE
+mo = robocop.search('RoboCop is part man, part machine, all cop.')
+print(mo.group())  # 'RoboCop'
+mo1 = robocop.search('ROBOCOP protects the innocent.')
+print(mo1.group())  # 'ROBOCOP'
+mo2 = robocop.search('Al, why does your programming book talk about robocop so much?')
+print(mo2.group())  # 'robocop'
+
+'''---------------------------------用sub()方法替换字符串---------------------------------------------------------'''
+
+# Regex对象的sub()方法需要传入两个参数。第一个参数是一个字符串，用于取代发现的匹配。第二个参数是一个字符串，即正则表达式。
+namesRegex = re.compile(r'Agent \w+ \w+ \w+ \w+')
+mo = namesRegex.search('Agent Alice gave the secret documents to Agent Bob.')
+print(mo.group())  # Agent Alice gave the secret
+namesRegex = re.compile(r'Agent \w+')
+mo1 = namesRegex.sub('CENSORED', 'Agent Alice gave the secret documents to Agent Bob.')
+print(mo1)  # CENSORED gave the secret documents to CENSORED.
+
+# 需要使用匹配的文本本身，作为替换的一部分。在sub()的第一个参数中，可以输入\1、\2、\3……。表示“在替换中输入分组1、2、3……的文本”
+
+agentNamesRegex = re.compile(r'Agent (\w)\w*')
+mo = agentNamesRegex.search('Agent Alice told Agent Carol that Agent Eve knew Agent Bob was a double agent.')
+print(mo.group())  # Agent Alice
+print(mo.group(1))  # A
+agentNamesRegex = re.compile(r'Agent (\w)\w*')
+mo1 = agentNamesRegex.sub(r'\1****', 'Agent Alice told Agent Carol that Agent Eve knew Agent Bob was a double agent.')
+print(mo1)  # A**** told C**** that E**** knew B**** was a double agent.'
+
+# re.VERBOSE  # 忽略正则表达式字符串中的空白符和注释
+phoneRegex = re.compile(r'((\d{3}|\(\d{3}\))?(\s|-|\.)?\d{4}(\s|-|\.)?\d{4}(\s*(ext|x|ext.)\s*(\d{2,5}))?)', re.VERBOSE)
+mo = phoneRegex.findall("38637788")
+mo1 = phoneRegex.findall("3863-1234- x23")
+mo2 = phoneRegex.findall("010-1234-2345 etx.145")
+print(mo, mo1, mo2)
+# [('38637788', '', '', '', '', '', '')]
+# [('3863-1234', '', '', '-', '', '', '')]
+# [('010-1234-2345', '010', '-', '-', '', '', '')]
+
+someRegexValue = re.compile('foo', re.IGNORECASE | re.DOTALL | re.VERBOSE)
